@@ -1,11 +1,19 @@
 <?php
 
-class SomeObject {
+interface iObjectType{
+    function getObjectName();
+}
+
+class SomeObject implements iObjectType{
     protected $name;
 
-    public function __construct(string $name) { }
+    public function __construct(string $name) {
+        $this->name=$name;
+    }
 
-    public function getObjectName() { }
+    public function getObjectName() {
+        return $this->name;
+    }
 }
 
 class SomeObjectsHandler {
@@ -14,6 +22,8 @@ class SomeObjectsHandler {
     public function handleObjects(array $objects): array {
         $handlers = [];
         foreach ($objects as $object) {
+            if(!$object instanceof iObjectType)throw new Exception("Wrong typeof presented object...");
+
             if ($object->getObjectName() == 'object_1')
                 $handlers[] = 'handle_object_1';
             if ($object->getObjectName() == 'object_2')
